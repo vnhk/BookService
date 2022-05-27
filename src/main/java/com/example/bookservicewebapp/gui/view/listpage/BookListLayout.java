@@ -20,7 +20,6 @@ public class BookListLayout extends VerticalLayout {
     private Label titleLabel;
     @Getter
     private Grid<Book> bookGrid;
-    @Getter
     private Button newBookButton;
 
     public void initGUI(List<Book> books) {

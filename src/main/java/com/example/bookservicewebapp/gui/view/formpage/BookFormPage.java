@@ -7,6 +7,7 @@ import com.example.bookservicewebapp.model.exception.BookApplicationException;
 import com.example.bookservicewebapp.service.BookFormManager;
 import com.vaadin.flow.component.UI;
 import com.vaadin.flow.router.Route;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 import javax.annotation.PostConstruct;
@@ -15,6 +16,7 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class BookFormPage extends BookTemplatePage {
     private final BookFormManager bookManager;
+    @Getter
     private BookForm bookForm;
 
     @PostConstruct

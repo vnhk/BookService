@@ -15,21 +15,17 @@ import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 
+@Getter
 public class BookForm extends FormLayout {
     private static final String NEW_BOOK_BUTTON_VALUE = "Save";
-    @Getter
     private Label titleLabel;
-    @Getter
     private TextField authorForename;
-    @Getter
     private TextField authorSurname;
-    @Getter
     private TextField title;
-    @Getter
     private TextField isbn;
-    private Binder<BookInput> binder;
     private Button save;
     private Button cancel;
+    private Binder<BookInput> binder;
 
     public void init() {
         titleLabel = new Label();
