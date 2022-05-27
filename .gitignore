@@ -37,3 +37,13 @@ build/
 .mvn
 mvnw.cmd
 mvnw
+/frontend/index.html
+/frontend/generated/index.ts
+/package.json
+/package-lock.json
+/tsconfig.json
+/types.d.ts
+/frontend/generated/vaadin.ts
+/frontend/generated/vaadin-featureflags.ts
+/webpack.config.js
+/webpack.generated.js
