@@ -5,6 +5,7 @@ import com.example.bookservicewebapp.model.BookInput;
 import com.example.bookservicewebapp.model.exception.AuthorNameValidationException;
 import com.example.bookservicewebapp.model.exception.BookApplicationException;
 import com.example.bookservicewebapp.service.BookFormManager;
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.data.binder.Binder;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -31,26 +33,33 @@ public class BookFormPageTest {
     private Binder<BookInput> binder;
 
     @Mock
-    private Notification notification;
+    private Notification successNotification;
+
+    @Mock
+    private Notification errorNotification;
 
     private BookFormPage bookFormPage;
 
     @BeforeEach
     public void setup() {
         bookFormPage = new BookFormPage(bookManager);
-        ReflectionTestUtils.invokeMethod(bookFormPage, "initNotification");
+        ReflectionTestUtils.invokeMethod(bookFormPage, "initNotifications");
         ReflectionTestUtils.invokeMethod(bookFormPage, "init");
         ReflectionTestUtils.setField(bookFormPage.getBookForm(), "binder", binder);
-        bookFormPage.notification = notification;
+        bookFormPage.errorNotification = errorNotification;
+        bookFormPage.successNotification = successNotification;
     }
 
     @Test
     public void saveBookTestSuccess() {
+        UI.setCurrent(mock(UI.class));
+
         when(binder.isValid()).thenReturn(true);
 
         bookFormPage.getBookForm().getSave().click();
 
         verify(bookManager).persistForm(any(BookInput.class));
+        verify(successNotification).open();
     }
 
     @Test
@@ -71,7 +80,7 @@ public class BookFormPageTest {
         bookFormPage.getBookForm().getSave().click();
 
         verify(bookManager).persistForm(any(BookInput.class));
-        verify(notification).open();
+        verify(errorNotification).open();
 
         assertTrue(bookFormPage.getBookForm().getAuthorForename().isInvalid());
         assertTrue(bookFormPage.getBookForm().getAuthorSurname().isInvalid());
@@ -86,7 +95,7 @@ public class BookFormPageTest {
         bookFormPage.getBookForm().getSave().click();
 
         verify(bookManager).persistForm(any(BookInput.class));
-        verify(notification).open();
+        verify(errorNotification).open();
 
         assertFalse(bookFormPage.getBookForm().getAuthorForename().isInvalid());
         assertFalse(bookFormPage.getBookForm().getAuthorSurname().isInvalid());

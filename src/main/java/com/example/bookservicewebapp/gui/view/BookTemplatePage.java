@@ -15,26 +15,35 @@ import javax.annotation.PostConstruct;
 
 @CssImport("./styles/main.css")
 public abstract class BookTemplatePage extends VerticalLayout {
-    protected Notification notification;
-    private Button notificationCloseButton;
+    protected Notification errorNotification;
+    protected Notification successNotification;
+    private Button errorNotificationCloseButton;
+    private Button successNotificationCloseButton;
 
     @PostConstruct
     private void init() {
-        initNotification();
+        initNotifications();
     }
 
-    private void initNotification() {
-        notification = new Notification();
-        notification.addThemeVariants(NotificationVariant.LUMO_ERROR);
-        notificationCloseButton = new Button(new Icon("lumo", "cross"));
-        notificationCloseButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
-        notificationCloseButton.getElement().setAttribute("aria-label", "Close");
-        notificationCloseButton.addClickListener(event -> {
-            notification.close();
-        });
+    private void initNotifications() {
+        errorNotification = new Notification();
+        errorNotification.addThemeVariants(NotificationVariant.LUMO_ERROR);
+        errorNotificationCloseButton = initNotificationCloseButton(errorNotification);
+
+        successNotification = new Notification();
+        successNotification.addThemeVariants(NotificationVariant.LUMO_SUCCESS);
+        successNotificationCloseButton = initNotificationCloseButton(successNotification);
     }
 
-    protected void showNotification(String message) {
+    protected void showErrorNotification(String message) {
+        showNotification(errorNotification, errorNotificationCloseButton, message);
+    }
+
+    protected void showSuccessNotification(String message) {
+        showNotification(successNotification, successNotificationCloseButton, message);
+    }
+
+    private void showNotification(Notification notification, Button notificationCloseButton, String message) {
         notification.removeAll();
 
         Div text = new Div(new Text(message));
@@ -43,5 +52,14 @@ public abstract class BookTemplatePage extends VerticalLayout {
 
         notification.add(layout);
         notification.open();
+    }
+
+    private Button initNotificationCloseButton(Notification notification) {
+        Button notificationCloseButton = new Button(new Icon("lumo", "cross"));
+        notificationCloseButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY_INLINE);
+        notificationCloseButton.getElement().setAttribute("aria-label", "Close");
+        notificationCloseButton.addClickListener(event -> notification.close());
+
+        return notificationCloseButton;
     }
 }

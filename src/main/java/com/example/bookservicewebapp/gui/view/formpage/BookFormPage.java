@@ -35,11 +35,17 @@ public class BookFormPage extends BookTemplatePage {
     private void saveBook(BookInput bookInput) {
         try {
             bookManager.persistForm(bookInput);
+            navigateToBookListPage();
+            showSuccessNotification("Book has been added successfully!");
         } catch (AuthorNameValidationException e) {
             bookForm.setInvalidAuthorFields();
-            showNotification(e.getMessage());
+            showErrorNotification(e.getMessage());
         } catch (BookApplicationException e) {
-            showNotification("Book cannot be saved! Please contact administrator!");
+            showErrorNotification("Book cannot be saved! Please contact administrator!");
         }
+    }
+
+    private void navigateToBookListPage() {
+        UI.getCurrent().navigate("list");
     }
 }
