@@ -9,11 +9,10 @@
         <relativePath/>
     </parent>
     <groupId>com.example</groupId>
-    <artifactId>BookServiceWebApp</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>BookServiceWebApp</name>
-    <description>Book Service Application</description>
+    <artifactId>BookService</artifactId>
+    <version>0.0.1</version>
+    <packaging>war</packaging>
+
     <properties>
         <java.version>11</java.version>
         <vaadin.version>23.0.9</vaadin.version>
@@ -30,6 +29,7 @@
         <dependency>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-spring-boot-starter</artifactId>
+            <version>${vaadin.version}</version>
         </dependency>
         <dependency>
             <groupId>junit</groupId>
@@ -71,12 +71,16 @@
         </dependencies>
     </dependencyManagement>
 
+
     <build>
+        <defaultGoal>spring-boot:run</defaultGoal>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <wait>500</wait>
+                    <maxAttempts>240</maxAttempts>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
@@ -85,11 +89,24 @@
                     </excludes>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.vaadin</groupId>
+                <artifactId>vaadin-maven-plugin</artifactId>
+                <version>${vaadin.version}</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>prepare-frontend</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
     <profiles>
         <profile>
+            <!-- Production mode is activated using -Pproduction -->
             <id>production</id>
             <build>
                 <plugins>
@@ -99,17 +116,15 @@
                         <version>${vaadin.version}</version>
                         <executions>
                             <execution>
-                                <id>frontend</id>
-                                <phase>compile</phase>
                                 <goals>
-                                    <goal>prepare-frontend</goal>
                                     <goal>build-frontend</goal>
                                 </goals>
-                                <configuration>
-                                    <productionMode>true</productionMode>
-                                </configuration>
+                                <phase>compile</phase>
                             </execution>
                         </executions>
+                        <configuration>
+                            <productionMode>true</productionMode>
+                        </configuration>
                     </plugin>
                 </plugins>
             </build>
