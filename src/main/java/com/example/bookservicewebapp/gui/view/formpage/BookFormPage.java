@@ -1,6 +1,7 @@
 package com.example.bookservicewebapp.gui.view.formpage;
 
 import com.example.bookservicewebapp.gui.view.BookTemplatePage;
+import com.example.bookservicewebapp.gui.view.GUIMessages;
 import com.example.bookservicewebapp.gui.view.RoutePath;
 import com.example.bookservicewebapp.model.BookInput;
 import com.example.bookservicewebapp.model.exception.AuthorNameValidationException;
@@ -37,12 +38,12 @@ public class BookFormPage extends BookTemplatePage {
         try {
             bookManager.persistForm(bookInput);
             navigateToBookListPage();
-            showSuccessNotification("Book has been added successfully!");
+            showSuccessNotification(GUIMessages.BOOK_ADDED);
         } catch (AuthorNameValidationException e) {
             bookForm.setInvalidAuthorFields();
             showErrorNotification(e.getMessage());
         } catch (BookApplicationException e) {
-            showErrorNotification("Book cannot be saved! Please contact administrator!");
+            showErrorNotification(GUIMessages.CANNOT_SAVE_BOOK);
         }
     }
 

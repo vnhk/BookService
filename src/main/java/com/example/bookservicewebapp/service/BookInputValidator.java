@@ -27,6 +27,7 @@ public class BookInputValidator {
 
     private void validateAuthor(BookInput bookInput) {
         if (!doesForenameOrSurnameStartsWithA(bookInput)) {
+            log.error(ApplicationErrors.FORENAME_SURNAME_VALIDATION_FAILED);
             throw new AuthorNameValidationException(ApplicationErrors.FORENAME_SURNAME_VALIDATION_FAILED);
         }
     }
