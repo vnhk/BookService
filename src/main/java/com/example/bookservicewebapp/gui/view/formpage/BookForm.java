@@ -1,12 +1,13 @@
 package com.example.bookservicewebapp.gui.view.formpage;
 
+import com.example.bookservicewebapp.gui.view.GUILabels;
 import com.example.bookservicewebapp.model.BookInput;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.button.ButtonVariant;
-import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -16,8 +17,7 @@ import com.vaadin.flow.shared.Registration;
 import lombok.Getter;
 
 @Getter
-public class BookForm extends FormLayout {
-    private static final String NEW_BOOK_BUTTON_VALUE = "Save";
+public class BookForm extends VerticalLayout {
     private Label titleLabel;
     private TextField authorForename;
     private TextField authorSurname;
@@ -30,24 +30,16 @@ public class BookForm extends FormLayout {
     public void init() {
         titleLabel = new Label();
 
-        authorForename = new TextField("Forename");
-        authorForename.setRequired(true);
-        authorForename.setClearButtonVisible(true);
-
-        authorSurname = new TextField("Surname");
-        authorSurname.setRequired(true);
-        authorSurname.setClearButtonVisible(true);
-
-        title = new TextField("Title");
-        title.setRequired(true);
-        title.setClearButtonVisible(true);
-
-        isbn = new TextField("ISBN");
-        isbn.setRequired(true);
-        isbn.setClearButtonVisible(true);
+        authorForename = buildTextFieldForm(GUILabels.FORENAME);
+        authorSurname = buildTextFieldForm(GUILabels.SURNAME);
+        title = buildTextFieldForm(GUILabels.TITLE);
+        isbn = buildTextFieldForm(GUILabels.ISBN);
 
         initValidation();
         addToLayout();
+
+        setAlignItems(FlexComponent.Alignment.CENTER);
+        setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
     }
 
     public void setInvalidAuthorFields() {
@@ -65,15 +57,25 @@ public class BookForm extends FormLayout {
     private void addToLayout() {
         VerticalLayout verticalLayout = new VerticalLayout();
         verticalLayout.add(titleLabel, authorForename, authorSurname, title, isbn, createButtonsLayout());
+        verticalLayout.setAlignItems(FlexComponent.Alignment.CENTER);
+        verticalLayout.setJustifyContentMode(FlexComponent.JustifyContentMode.CENTER);
         add(verticalLayout);
     }
 
+    private TextField buildTextFieldForm(String labelText) {
+        TextField textField = new TextField(labelText);
+        textField.setRequired(true);
+        textField.setClearButtonVisible(true);
+
+        return textField;
+    }
+
     private HorizontalLayout createButtonsLayout() {
-        save = new Button(NEW_BOOK_BUTTON_VALUE);
+        save = new Button(GUILabels.SAVE_BOOK_BUTTON_VALUE);
         save.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
         save.setEnabled(false);
 
-        cancel = new Button("Cancel");
+        cancel = new Button(GUILabels.CANCEL_BUTTON);
         cancel.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         addButtonsListeners();
@@ -90,9 +92,7 @@ public class BookForm extends FormLayout {
             }
         });
 
-        cancel.addClickListener(buttonClickEvent -> {
-            fireEvent(new CancelEvent(this));
-        });
+        cancel.addClickListener(buttonClickEvent -> fireEvent(new CancelEvent(this)));
     }
 
     private BookInput getBookInput() {

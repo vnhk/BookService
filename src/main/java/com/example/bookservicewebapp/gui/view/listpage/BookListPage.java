@@ -1,6 +1,7 @@
 package com.example.bookservicewebapp.gui.view.listpage;
 
 import com.example.bookservicewebapp.gui.view.BookTemplatePage;
+import com.example.bookservicewebapp.gui.view.RoutePath;
 import com.example.bookservicewebapp.model.Book;
 import com.example.bookservicewebapp.service.BookManager;
 import com.vaadin.flow.component.dependency.CssImport;
@@ -10,7 +11,7 @@ import lombok.RequiredArgsConstructor;
 import javax.annotation.PostConstruct;
 import java.util.List;
 
-@Route("list")
+@Route(RoutePath.BOOK_LIST)
 @RequiredArgsConstructor
 @CssImport("./styles/main.css")
 public class BookListPage extends BookTemplatePage {
