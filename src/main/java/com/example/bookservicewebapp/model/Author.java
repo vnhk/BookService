@@ -1,6 +1,7 @@
 package com.example.bookservicewebapp.model;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -30,5 +31,6 @@ public class Author implements DBTable {
 
     @OneToMany(mappedBy = "author", fetch = FetchType.EAGER)
     @ToString.Exclude
+    @JsonIgnore
     private Set<Book> books = new HashSet<>();
 }
